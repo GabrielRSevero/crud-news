@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NewsService } from './news.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { News } from './news.entity';
 import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
@@ -25,14 +24,14 @@ describe('NewsService', () => {
       providers: [
         NewsService,
         {
-          provide: getRepositoryToken(News),
+          provide: 'NEWS_REPOSITORY',
           useValue: createMockRepository(),
         },
       ],
     }).compile();
 
-    service = module.get<NewsService>(NewsService);
-    newsRepository = module.get<MockRepository>(getRepositoryToken(News));
+    service = module.get(NewsService);
+    newsRepository = module.get('NEWS_REPOSITORY');
   });
 
   it('should create and save a news item', async () => {
