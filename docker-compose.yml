@@ -1,0 +1,38 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: spectrax-crud-mysql
+    restart: always
+    cap_add:
+      - SYS_NICE
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    ports:
+      - '3306:3306'
+    env_file:
+      - .env
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - nest-network
+
+  app:
+    build: .
+    container_name: spectrax-crud-app
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - nest-network
+
+volumes:
+  mysql_data:
+
+networks:
+  nest-network:
