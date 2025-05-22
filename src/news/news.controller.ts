@@ -68,6 +68,7 @@ export class NewsController {
   @ApiQuery({ name: 'limit', required: false, example: 10 })
   @ApiQuery({ name: 'offset', required: false, example: 0 })
   @ApiQuery({ name: 'dateOrder', required: false, example: 'ASC' })
+  @ApiQuery({ name: 'search', required: false, example: 'Hoje' })
   async findAll(
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
     @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
