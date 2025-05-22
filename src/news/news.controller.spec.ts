@@ -40,7 +40,7 @@ describe('NewsController', () => {
     expect(result).toEqual(created);
   });
 
-  it('should return paginated news list', async () => {
+  it('should return all news with pagination', async () => {
     const response = {
       data: [{ id: 1, title: 'title', content: 'content', date: new Date() }],
       total: 1,
