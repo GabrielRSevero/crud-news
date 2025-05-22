@@ -72,11 +72,13 @@ export class NewsController {
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
     @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
     @Query('dateOrder') dateOrder: 'ASC' | 'DESC' = 'DESC',
+    @Query('search') search: string,
   ) {
     const response = await this.newsService.findAll(
       Number(limit),
       Number(offset),
       dateOrder,
+      search,
     );
 
     return response;

@@ -16,12 +16,25 @@ export class NewsService {
     return await this.newsRepository.save(newsItem);
   }
 
-  async findAll(limit = 10, offset = 0, dateOrder: 'ASC' | 'DESC' = 'DESC') {
-    const [data, total] = await this.newsRepository.findAndCount({
-      take: limit,
-      skip: offset,
-      order: { date: dateOrder },
-    });
+  async findAll(
+    limit = 10,
+    offset = 0,
+    dateOrder: 'ASC' | 'DESC' = 'DESC',
+    search?: string,
+  ) {
+    const query = this.newsRepository.createQueryBuilder('news');
+
+    if (search) {
+      query.where('news.title LIKE :search OR news.content LIKE :search', {
+        search: `%${search}%`,
+      });
+    }
+
+    query.orderBy('news.date', dateOrder);
+    query.take(limit);
+    query.skip(offset);
+
+    const [data, total] = await query.getManyAndCount();
 
     return {
       data,
@@ -30,7 +43,6 @@ export class NewsService {
       offset,
     };
   }
-
   async findOne(id: number) {
     const newsItem = await this.newsRepository.findOne({ where: { id } });
 
